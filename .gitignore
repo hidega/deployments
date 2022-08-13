@@ -1,0 +1,9 @@
+node_modules/
+package-lock.json
+**.tgz
+**.gz
+**.tmp
+**.nopush
+**.bin
+**.img
+
