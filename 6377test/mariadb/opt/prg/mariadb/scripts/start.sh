@@ -11,8 +11,8 @@ SETUP_SQL_FILE=$MARIADB_HOME_DIR/scripts/setup.sql
 
 echo "
 create database middleware;
-create user 'mwadmin'@localhost identified by 'mwadminpwd';
-grant all privileges on middleware.* to 'mwadmin'@localhost;
+create user 'mwadmin'@'%' identified by 'mwadminpwd';
+grant all privileges on middleware.* to 'mwadmin'@'%';
 flush privileges;
 $(ssl_decrypt_files_sql $SECRET)
 " > $SETUP_SQL_FILE
@@ -31,4 +31,8 @@ mysqlize_file $MARIADB_CONF_FILE
 mysqlize_file $SETUP_SQL_FILE
 
 start_database $ROOT_PASSWORD $SETUP_SQL_FILE $MARIADB_CONF_FILE
+
+echo
+echo "Mariadb is running"
+echo
 

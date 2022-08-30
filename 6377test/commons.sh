@@ -15,28 +15,43 @@ OCI_BUILD="$OCI build "
 IMG_BASE_URL="https://people.inf.elte.hu/hiaiaat/img"
 BASE_IMAGE="alpine:3.16"
 
+IP_BASE="192.168.20"
+
+MONITOR_IMAGE_NAME="6377test/monitor"
+MONITOR_IMAGE_TAG="1"
+MONITOR_IMAGE_FULL_NAME=$MONITOR_IMAGE_NAME":"$MONITOR_IMAGE_TAG
+
+FILESERVER_IMAGE_NAME="6377test/fileserver"
+FILESERVER_IMAGE_TAG="1"
+FILESERVER_IMAGE_FULL_NAME=$MONITOR_IMAGE_NAME":"$MONITOR_IMAGE_TAG
+
+MARIADB_IMAGE_NAME="6377test/mariadb"
+MARIADB_IMAGE_TAG="1"
+MARIADB_IMAGE_FULL_NAME=$MARIADB_IMAGE_NAME":"$MARIADB_IMAGE_TAG
+MARIADB_HOSTNAME=mariadb
+MARIADB_SECRET=mariadb_secret
+MARIADB_ROOTPWD=mariadbpwd
+
 function devon_exit_if_last_failed() {
-  [ "$?" -ne "0" ] && echo "*** Failure $1" && exit 1
+  ERR=$?
+  [ "$ERR" -ne "0" ] && echo "*** Failure $1 ($ERR)" && exit 1
 }
 
-# image params
 function devon_build_image() {
-  echo "Building image $1"
-  $OCI image rm -f $1
-  $OCI_BUILD --no-cache $2 \
+  IMAGE=$1
+  PARAMS=$2
+  echo "Building image $IMAGE"
+  $OCI image rm -f $IMAGE
+  $OCI_BUILD --no-cache $PARAMS \
              --build-arg BASE_IMAGE=$BASE_IMAGE \
              --build-arg IMG_BASE_URL=$IMG_BASE_URL \
              --build-arg DEFAULT_USER_ID=$DEFAULT_USER_ID \
              --build-arg SERVICE_ID_FILE=$SERVICE_ID_FILE \
              --build-arg DEFAULT_USER=$DEFAULT_USER \
-             -t $1 .
-  devon_exit_if_last_failed $1
+             -t $IMAGE .
+  devon_exit_if_last_failed $IMAGE
   echo
-  echo "Image successfully built: $1"
+  echo "Image successfully built: $IMAGE"
 }
 
-# name image params
-function devon_run_image() {
-  $OCI run $3 --name $1 $2 /bin/sh
-}
 
