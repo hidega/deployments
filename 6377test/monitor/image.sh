@@ -14,7 +14,7 @@ fi
 if [ "$1" == "r" ]
 then 
   $OCI container rm -f monitor
-  $OCI run --rm -it --name "monitor" $MONITOR_IMAGE_FULL_NAME
+  $OCI run --rm -it -d --name monitor $MONITOR_IMAGE_FULL_NAME
   devon_exit_if_last_failed "cannot run $MONITOR_IMAGE_FULL_NAME"
 fi
 

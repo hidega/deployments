@@ -3,8 +3,7 @@
 . /opt/prg/mariadb/scripts/database_tasks.sh
 
 ROOT_PASSWORD=$1
-HOSTNAME=$2
-SECRET=$3
+SECRET=$2
 
 MARIADB_CONF_FILE=$MARIADB_HOME_DIR/etc/mariadb.cfg
 SETUP_SQL_FILE=$MARIADB_HOME_DIR/scripts/setup.sql
@@ -23,7 +22,7 @@ $SSL_CERT_SECTION
 
 [mariadbd]
 datadir=/opt/data/mariadb
-bind-address=$HOSTNAME
+bind-address=`hostname -i`
 port=3306
 " > $MARIADB_CONF_FILE
 
