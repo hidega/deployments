@@ -31,13 +31,13 @@ function start_monitor() {
   devon_exit_if_last_failed 401
 }
 
-function build_mariadb() {
-  cd ./mariadb
+function build_mariadb_primary() {
+  cd ./mariadb-primary
   ./image.sh b
   cd .. 
 }
 
-function start_mariadb() {
+function start_mariadb_primary() {
   $OCI run -d --rm  \
      --name=mariadb \
      --network=$1 \
@@ -65,12 +65,11 @@ function start_fileserver() {
 
 cleanup
 NETWORK_NAME=$(create_network)
-echo "Network: $NETWORK_NAME"
 build_monitor
-build_mariadb
+#build_mariadb_primary
 build_fileserver
 start_monitor $NETWORK_NAME
-start_mariadb $NETWORK_NAME
+#start_mariadb_primary $NETWORK_NAME
 start_fileserver $NETWORK_NAME
 
 echo
