@@ -67,10 +67,10 @@ cleanup
 NETWORK_NAME=$(create_network)
 build_monitor
 #build_mariadb_primary
-build_fileserver
+#build_fileserver
 start_monitor $NETWORK_NAME
 #start_mariadb_primary $NETWORK_NAME
-start_fileserver $NETWORK_NAME
+#start_fileserver $NETWORK_NAME
 
 echo
 echo "Services are started :)"
