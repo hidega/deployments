@@ -2,7 +2,7 @@
 
 . ../commons.sh
 
-if [ "$1" == "b" ] 
+if [ "$1" == "b" ]
 then
   rm -rf ./tmp
   mkdir ./tmp
