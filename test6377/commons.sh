@@ -33,24 +33,3 @@ MARIADB_PRIMARY_HOSTNAME=mariadb-primary
 MARIADB_SECRET=mariadb_secret
 MARIADB_ROOTPWD=mariadbpwd
 
-function exit_if_last_failed() {
-  ERR=$?
-  [ "$ERR" -ne "0" ] && echo "*** Failure $1 ($ERR)" && set -e && exit 1
-}
-
-function build_image() {
-  IMAGE=$1
-  PARAMS=$2
-  echo "Building image $IMAGE"
-  $OCI image rm -f $IMAGE
-  $OCI_BUILD --no-cache $PARAMS \
-             --build-arg BASE_IMAGE=$BASE_IMAGE \
-             --build-arg COMMON_SERVICE_PORT=$COMMON_SERVICE_PORT \
-             --build-arg SERVICE_DIR=$SERVICE_DIR \
-             --build-arg SERVICE_CMD=$SERVICE_CMD \
-             --build-arg HEALTHCHECK_CMD=$HEALTHCHECK_CMD \
-             -t $IMAGE .
-  exit_if_last_failed $IMAGE
-  echo
-  echo "Image successfully built: $IMAGE"
-}

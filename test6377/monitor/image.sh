@@ -1,20 +1,23 @@
 #!/bin/bash
 
-. ../commons.sh
+. ../build_tasks.sh
 
-if [ "$1" == "b" ]
+MONITOR_IMAGE_FULL_NAME=$2
+CMD=$1
+
+if [ "$CMD" == "b" ]
 then
   rm -rf ./opt
   mkdir -p ./opt/cert
   cp ../cert/* ./opt/cert
-  build_image $MONITOR_IMAGE_FULL_NAME "--squash-all"
-  exit_if_last_failed "cannot build $MONITOR_IMAGE_FULL_NAME"
+  devon_build_image $MONITOR_IMAGE_FULL_NAME "--squash-all"
+  devon_exit_if_last_failed "cannot build $MONITOR_IMAGE_FULL_NAME"
 fi
 
-if [ "$1" == "r" ]
+if [ "$CMD" == "r" ]
 then 
-  $OCI container rm -f monitor
-  $OCI run --rm -it -d --name monitor $MONITOR_IMAGE_FULL_NAME
-  exit_if_last_failed "cannot run $MONITOR_IMAGE_FULL_NAME"
+  $DEVON_OCI container rm -f monitor
+  $DEVON_OCI run --rm -it -d --name monitor $MONITOR_IMAGE_FULL_NAME
+  devon_exit_if_last_failed "cannot run $MONITOR_IMAGE_FULL_NAME"
 fi
 

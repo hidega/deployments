@@ -1,15 +1,30 @@
 #!/bin/bash
 
-. ../commons.sh
+. ../build_tasks.sh
 
-if [ "$1" == "b" ]
-then
+CMD=$1
+PARAMS=$2
+
+FILESERVER_IMAGE_FULL_NAME=$(devon_get_json_property "$PARAMS" "imageFullName")
+
+function build_fileserver() {
+  local fileserver_tasks="/tmp/fileserver_tasks.sh"
+  local base_image=$(devon_get_json_property "$PARAMS" "baseImage")  
+  local entry_point="$(devon_get_constant "service.serviceDir")/$(devon_get_constant "service.serviceCmd")"
+
   rm -rf ./tmp
+  devon_exit_if_last_failed "cannot rm tmp"
+  
   mkdir ./tmp
-  SETUP_SCRIPT=/tmp/setup.sh
-  cat $BUILD_TOOLS_DIR/image_commons.sh $BUILD_TOOLS_DIR/fileserver_tasks.sh > .$SETUP_SCRIPT
-  echo -e "#!/bin/sh\n\n`cat .$SETUP_SCRIPT`" > .$SETUP_SCRIPT
-  build_image $FILESERVER_IMAGE_FULL_NAME "--build-arg=USER_NAME=$DEFAULT_USER --build-arg=USER_ID=$DEFAULT_USER_ID --build-arg=SETUP_SCRIPT=$SETUP_SCRIPT"
-fi
+  devon_exit_if_last_failed "cannot create tmp"
+  
+  cp $(devon_get_json_property "$PARAMS" "tasksScript") .$fileserver_tasks
+  devon_exit_if_last_failed "cannot copy build tasks"
+  
+  devon_build_image $FILESERVER_IMAGE_FULL_NAME "--build-arg=BASE_IMAGE=$base_image --build-arg=FILESERVER_TASKS=$fileserver_tasks --build-arg=ENTRY_POINT=$entry_point"
+}
 
-[ "$1" == "r" ] && $OCI run --rm -it --name "monitor" $FILESERVER_IMAGE_FULL_NAME
+[ "$CMD" == "b" ] && build_fileserver
+
+[ "$CMD" == "r" ] && $DEVON_OCI run --rm -it --name "monitor" $FILESERVER_IMAGE_FULL_NAME
+

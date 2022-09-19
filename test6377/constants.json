@@ -4,7 +4,43 @@
     "ipRange": "192.168.20.0/24"
   },
   "monitor": {
+    "imageName": "test6377/monitor",
+    "imageTag": "1",
+    "hostname": "monitor",
+    "ip": "192.168.20.100"
   },
-  "fileServer": {
+  "mariadbPrimary": {
+    "imageName": "test6377/mariadb-primary",
+    "imageTag": "1",
+    "hostname": "maraiadbp",
+    "ip": "192.168.20.105",
+    "rootPassword": "rootpwd",
+    "secret": "secret"
+  },
+  "mariadbReplica": {
+    "imageName": "test6377/mariadb-replica",
+    "imageTag": "1",
+    "hostname": "maraiadbr",
+    "ip": "192.168.20.110",
+    "rootPassword": "rootpwd",
+    "secret": "secret"
+  },
+  "fileserver": {
+    "imageName": "test6377/fileserver",
+    "imageTag": "1",
+    "hostname": "filesrv",
+    "ip": "192.168.20.115"
+  },
+  "redisPrimary": {
+    "imageName": "test6377/redis-primary",
+    "imageTag": "1",
+    "hostname": "redisp",
+    "ip": "192.168.20.120"
+  },
+  "redisReplica": {
+    "imageName": "test6377/redis-replica",
+    "imageTag": "1",
+    "hostname": "redisr",
+    "ip": "192.168.20.125"
   }
 }
